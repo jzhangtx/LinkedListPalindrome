@@ -53,19 +53,17 @@ func (pNode *ListNode) Print() {
 
 func Palindrome(pHead, pTail *ListNode) (bool, *ListNode, bool) {
 	if pTail.next == nil {
-		fmt.Printf("%d, %d\n", pHead.data, pTail.data)
 		return pHead.data == pTail.data, pHead.next, false
 	}
 
 	isPalindrome, pHead, finished := Palindrome(pHead, pTail.next)
 	if finished {
-		return true, nil, true
+		return isPalindrome, nil, true
 	}
 
 	if pHead == pTail || pHead.next == pTail {
 		finished = true
 	}
-	fmt.Printf("%d, %d\n", pHead.data, pTail.data)
 	return (isPalindrome && pHead.data == pTail.data), pHead.next, finished
 }
 
@@ -76,6 +74,20 @@ func IsPalindrome(list *ListNode) bool {
 }
 
 func main() {
-	pHead := &ListNode{1, &ListNode{2, &ListNode{3, &ListNode{4, &ListNode{3, &ListNode{2, &ListNode{1, nil}}}}}}}
-	fmt.Println(IsPalindrome(pHead))
+	for {
+		fmt.Print("Number of nodes: ")
+		var count int
+		fmt.Scan(&count)
+		if count == 0 {
+			break
+		}
+
+		vec := GetArrayFromInput(count, "Please enter the list: ")
+		pHead := GetListFromArray(vec)
+		if IsPalindrome(pHead) {
+			fmt.Println("The list is palindrome")
+		} else {
+			fmt.Println("The list is not palindrome")
+		}
+	}
 }

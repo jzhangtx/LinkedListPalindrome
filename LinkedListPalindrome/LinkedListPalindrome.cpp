@@ -118,7 +118,7 @@ int main()
 
         std::cout << "The list: {";
         PrintList(pHead);
-        std::cout << "} " << std::endl;
+        std::cout << "} ";
 
         std::cout << (IsPalindrome(pHead) ? "is" : "is not") << " palindrome!" << std::endl;
         FreeList(pHead);
