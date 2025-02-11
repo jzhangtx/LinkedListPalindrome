@@ -61,23 +61,31 @@ void FreeList(ListNode* pNode)
     delete pNode;
 }
 
-bool IsListPalindrome(ListNode** pHead, ListNode* pTail)
+bool IsListPalindrome(ListNode** pHead, ListNode* pTail, bool& finished)
 {
-    if (pTail == nullptr)   // the tail is found
+    if (pTail == nullptr)    // if the element count is even, this will stop the recursion
         return true;
 
-    if (*pHead == pTail)    // if the element count is odd, this will stop the recursion
-        return true;
-
-    if ((*pHead)->next == pTail)    // if the element count is even, this will stop the recursion
-        return (*pHead)->data == pTail->data;
-
-    if (!IsListPalindrome(pHead, pTail->next)) // before the tail is found
+    if (!IsListPalindrome(pHead, pTail->next, finished)) // before the tail is found
         return false;
+
+    if (finished)           // compared all nodes
+        return true;
+
+    if (*pHead == pTail)    // hit the middle of the list (odd number of elements)
+    {
+        finished = true;
+        return true;
+    }
+
+    if ((*pHead)->next == pTail)    // hit the middle of the list, but still need to compare the two nodes
+                                    //  (even number of elements)
+        finished = true;
 
     // after the the tail is found, compare the node and move the head node forward
     if ((*pHead)->data != pTail->data)
         return false;
+
     *pHead = (*pHead)->next;
 
     return true;
@@ -89,9 +97,10 @@ bool IsPalindrome(ListNode* list)
         return true;
 
     ListNode* pList = list;
+    bool finished = false;
     // the IsListPalindrome function is made recursive and change the list head
     //  so we need to use a auto value here
-    return IsListPalindrome(&pList, list->next->next);
+    return IsListPalindrome(&pList, list->next->next, finished);
 }
 
 int main()
@@ -109,7 +118,7 @@ int main()
 
         std::cout << "The list: {";
         PrintList(pHead);
-        std::cout << "} ";
+        std::cout << "} " << std::endl;
 
         std::cout << (IsPalindrome(pHead) ? "is" : "is not") << " palindrome!" << std::endl;
         FreeList(pHead);
